@@ -1,0 +1,94 @@
+#!/bin/sh
+
+# =============================================================================
+# bspwmrc - Final configuration for developer setup
+# =============================================================================
+
+# Kill any existing processes that might interfere
+pgrep -x sxhkd > /dev/null && pkill -x sxhkd
+pgrep -x polybar > /dev/null && pkill -x polybar
+pgrep -x picom > /dev/null && pkill -x picom
+
+# =============================================================================
+# Startup applications
+# =============================================================================
+
+# Hotkey daemon
+sxhkd &
+
+# Status bar
+~/.config/polybar/launch.sh &
+
+# Wallpaper (replace with your actual path if different)
+feh --bg-fill ~/.config/bspwm/hong-kong-night.jpg &
+
+# Compositor (lightweight, optional blur/shadows)
+picom --experimental-backends --config ~/.config/picom/picom.conf &
+
+# UK keyboard layout
+setxkbmap gb
+
+# Touchpad natural scrolling off
+xinput set-prop "pointer:ETPS/2 Elantech Touchpad" "libinput Natural Scrolling Enabled" 0 2>/dev/null || true
+
+# =============================================================================
+# bspwm appearance & behavior
+# =============================================================================
+
+bspc config border_width         2
+bspc config window_gap           12
+bspc config top_padding          34    # Space for polybar
+bspc config bottom_padding       5
+bspc config left_padding         5
+bspc config right_padding        5
+
+bspc config split_ratio          0.52
+bspc config borderless_monocle   true
+bspc config gapless_monocle       true
+bspc config focus_follows_pointer true
+bspc config pointer_follows_focus false
+
+# Colors (match your previous theme)
+bspc config normal_border_color       "#595959"
+bspc config active_border_color       "#313244"
+bspc config focused_border_color      "#cdd6f4"
+bspc config presel_feedback_color     "#89b4fa"
+
+# =============================================================================
+# Monitor & desktop setup
+# =============================================================================
+
+# Auto-detect monitors (works for single or dual setup)
+bspc monitor -d 1 2 3 4 5 6 7 8 9 10
+
+# =============================================================================
+# Window rules
+# =============================================================================
+
+bspc rule -a Thunar state=floating rectangle=1000x700+460+200
+bspc rule -a Pavucontrol state=floating rectangle=800x600+560+300
+bspc rule -a Qpwgraph state=floating
+bspc rule -a firefox state=tiled
+bspc rule -a "*:floating" state=floating  # Catch-all for floating windows if needed
+
+# =============================================================================
+# Pointer
+# =============================================================================
+
+bspc config pointer_modifier mod4
+bspc config pointer_action1 move
+bspc config pointer_action2 resize_side
+bspc config pointer_action3 resize_corner
+
+# =============================================================================
+# Optional: Power-saving tweaks
+# =============================================================================
+
+# Reduce redraws
+bspc config ignore_ewmh_focus true
+
+# Turn off screen after 10 minutes of inactivity (adjust as needed)
+xset dpms 0 0 600
+xset s 540  # screensaver blank after 9 minutes
+
+echo "bspwm started successfully"
