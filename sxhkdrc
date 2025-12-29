@@ -1,0 +1,38 @@
+# Super as mod
+super + q
+    kitty
+
+super + shift + x
+    bspc node -c
+
+super + e
+    thunar
+
+super + space
+    rofi -show drun
+
+super + s
+    grim -g "$(slurp)" - | swappy -f -
+
+super + l
+    xset dpms force off  # or use betterlockscreen/slock
+
+# Focus
+super + {Left,Right,Up,Down}
+    bspc node -f {west,east,north,south}
+
+# Multimedia keys
+XF86AudioMute
+    pamixer -t
+
+XF86AudioLowerVolume
+    pamixer -d 5
+
+XF86AudioRaiseVolume
+    pamixer -i 5
+
+XF86MonBrightnessDown
+    brightnessctl set 10%-
+
+XF86MonBrightnessUp
+    brightnessctl set +10%
