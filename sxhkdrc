@@ -1,0 +1,117 @@
+# =============================================================================
+# sxhkdrc - Full hotkey configuration for bspwm (developer setup)
+# Super = Mod4 (Windows key)
+# =============================================================================
+
+# Terminal
+super + q
+    kitty
+
+# Close focused window
+super + shift + q
+    bspc node -c
+
+# File manager
+super + e
+    thunar
+
+# Application launcher
+super + space
+    rofi -show drun -show-icons
+
+# Screenshot (select area → edit with swappy)
+super + s
+    grim -g "$(slurp)" - | swappy -f -
+
+# Toggle floating
+super + f
+    bspc node -t "~floating"
+
+# Toggle fullscreen
+super + shift + f
+    bspc node -t "~fullscreen"
+
+# Make focused window monocle (no gaps)
+super + m
+    bspc node -t "~tiled"; bspc desktop -l next
+
+# =============================================================================
+# Focus / Swap windows
+# =============================================================================
+
+super + {Left,Down,Up,Right}
+    bspc node -f {west,south,north,east}
+
+super + shift + {Left,Down,Up,Right}
+    bspc node -s {west,south,north,east}
+
+# Focus parent / child
+super + p
+    bspc node -f @parent
+
+# =============================================================================
+# Workspaces (desktops) 1-10
+# =============================================================================
+
+super + {1,2,3,4,5,6,7,8,9,0}
+    bspc desktop -f '^{1,2,3,4,5,6,7,8,9,10}'
+
+super + shift + {1,2,3,4,5,6,7,8,9,0}
+    bspc node -d '^{1,2,3,4,5,6,7,8,9,10}' --follow
+
+# =============================================================================
+# Preselect (direction for next window split)
+# =============================================================================
+
+super + ctrl + {Left,Down,Up,Right}
+    bspc node -p {west,south,north,east}
+
+# Cancel preselect
+super + ctrl + space
+    bspc node -p cancel
+
+# =============================================================================
+# Resize windows
+# =============================================================================
+
+super + alt + {Left,Down,Up,Right}
+    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# =============================================================================
+# Multimedia keys (work globally)
+# =============================================================================
+
+XF86AudioMute
+    pamixer -t
+
+XF86AudioLowerVolume
+    pamixer -d 5
+
+XF86AudioRaiseVolume
+    pamixer -i 5
+
+XF86AudioMicMute
+    pamixer --default-source -t
+
+XF86MonBrightnessDown
+    brightnessctl set 10%-
+
+XF86MonBrightnessUp
+    brightnessctl set +10%
+
+# =============================================================================
+# Reload sxhkd (for editing this file)
+# =============================================================================
+
+super + Escape
+    pkill -USR1 -x sxhkd
+
+# =============================================================================
+# Quit / Restart bspwm
+# =============================================================================
+
+super + alt + q
+    bspc quit
+
+super + alt + r
+    bspc wm -r
